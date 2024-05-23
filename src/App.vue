@@ -17,6 +17,7 @@ fetch('https://fakestoreapi.com/products')
 .then((res)=>res.json())
 .then((dat)=>{products.value = dat})
 // .then((dat)=>{products.items = dat})
+// .then((dat)=>{products.items = dat})
 console.log(products);
 })
 </script>
