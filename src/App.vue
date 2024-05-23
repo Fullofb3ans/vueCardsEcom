@@ -6,11 +6,16 @@ import { reactive, ref, onBeforeMount, onMounted } from 'vue';
 import Vloader from "./components/Vloader.vue";
 
 const products = ref([]);
-
+// на reactive
+// const products  = reactive({
+//   items: null
+// });
+  
 onBeforeMount(()=>{
 fetch('https://fakestoreapi.com/products')
 .then((res)=>res.json())
 .then((dat)=>{products.value = dat})
+// .then((dat)=>{products.items = dat})
 console.log(products);
 })
 </script>
