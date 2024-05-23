@@ -5,8 +5,7 @@ import Vfooter from "./components/Vfooter.vue";
 import { reactive, ref, onBeforeMount, onMounted } from 'vue';
 import Vloader from "./components/Vloader.vue";
 
-const products = ref([])
-;
+const products = ref([]);
 // на reactive
 // const products  = reactive({
 //   items: null
