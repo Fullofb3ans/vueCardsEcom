@@ -3,6 +3,7 @@ import { ref } from 'vue'
 const props = defineProps(["product"]);
 
 function checkLength(item){
+  console.log(item);
     let text = '';
         for (let i = 0; i < item.length; i++) {
             if(i <= 50){
