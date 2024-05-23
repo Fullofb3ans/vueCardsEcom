@@ -5,12 +5,18 @@ import Vfooter from "./components/Vfooter.vue";
 import { reactive, ref, onBeforeMount, onMounted } from 'vue';
 import Vloader from "./components/Vloader.vue";
 
-const products = ref([]);
-
+const products = ref([])
+;
+// на reactive
+// const products  = reactive({
+//   items: null
+// });
+  
 onBeforeMount(()=>{
 fetch('https://fakestoreapi.com/products')
 .then((res)=>res.json())
 .then((dat)=>{products.value = dat})
+// .then((dat)=>{products.items = dat})
 console.log(products);
 })
 </script>
@@ -21,9 +27,11 @@ console.log(products);
   <body>
   <div class="preview" style="padding: 2%">
   <Vloader v-if="products.length == 0"/>
+  <!-- <Vloader v-if="products.items == null"/> -->
   
   <div v-else class="cards" style="">
-    <Vcard v-for="product in products" 
+   <!--  <Vcard v-for="product in products.items" -->
+    <Vcard v-for="product in products"
     :product="product"
     :key="product.id"/>
   </div>
