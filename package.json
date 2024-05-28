@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vee-validate/yup": "^4.12.8",
     "bootstrap": "^5.3.3",
-    "vue": "^3.4.21"
+    "bootstrap-vue": "^2.23.1",
+    "vee-validate": "^4.12.8",
+    "vue": "^3.4.27"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
