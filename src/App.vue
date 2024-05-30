@@ -4,32 +4,27 @@ import Vcard from "./components/Vcard.vue";
 import Vfooter from "./components/Vfooter.vue";
 import { reactive, ref, onBeforeMount, onMounted } from 'vue';
 import Vloader from "./components/Vloader.vue";
-
+import getProducts from "./components/serversFetches"
 const products = ref([]);
 // на reactive
 // const products  = reactive({
 //   items: null
 // });
-  
+
 onBeforeMount(()=>{
-fetch('https://fakestoreapi.com/products')
-.then((res)=>res.json())
-.then((dat)=>{products.value = dat})
-// .then((dat)=>{products.items = dat})
-// .then((dat)=>{products.items = dat})
-console.log(products);
+  getProducts(products);
 })
+
 </script>
 
 <template>
   <Vheader/>
   <main>
-  <body>
-  <div class="preview" style="padding: 2%">
+  <div class="preview">
   <Vloader v-if="products.length == 0"/>
   <!-- <Vloader v-if="products.items == null"/> -->
   
-  <div v-else class="cards" style="">
+  <div v-else class="cards">
    <!--  <Vcard v-for="product in products.items" -->
     <Vcard v-for="product in products"
     :product="product"
@@ -37,7 +32,6 @@ console.log(products);
   </div>
 
 </div>
-  </body>
   </main>
   <Vfooter />
 </template>
@@ -50,6 +44,10 @@ console.log(products);
     grid-gap: 30px;
     align-content: center;
     justify-content: center;
+}
+
+.preview{
+  padding: 2%;
 }
 
 </style>
