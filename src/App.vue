@@ -11,8 +11,8 @@ const products = ref([]);
 //   items: null
 // });
 
-onBeforeMount(()=>{
- products.value = getProducts();
+onBeforeMount(async ()=>{
+ products.value = await getProducts();
  console.log(products);
 })
 
