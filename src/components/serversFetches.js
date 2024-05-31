@@ -1,5 +1,5 @@
-export default function getProducts(products) {
+export default function getProducts() {
     fetch('https://fakestoreapi.com/products')
         .then((res) => res.json())
-        .then((dat) => { products.value = dat })
+        .then((dat) => { return dat })
 }

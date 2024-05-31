@@ -12,7 +12,8 @@ const products = ref([]);
 // });
 
 onBeforeMount(()=>{
-  getProducts(products);
+ products.value = getProducts();
+ console.log(products);
 })
 
 </script>
