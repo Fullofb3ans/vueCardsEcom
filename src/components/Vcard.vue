@@ -28,6 +28,7 @@ function callBuyModal(id) {
     />
     <h5 class="card-title" style="text-align: center">{{ product.title }}</h5>
     <div class="card-body">
+      <p class="card-text">{{product.price + '$'}}</p>
       <p class="card-text">{{ checkLength(product.description) + "..." }}</p>
     </div>
     <button @click="callBuyModal(product.id)" class="butButton btn btn-outline-primary">

@@ -56,7 +56,8 @@ const simpleSchema = yup.object({
   fio: yup.string().required(),
   address: yup.string().required(),
   card: yup.string().required().min(13),
-  birth: yup.string().required(),
+  birth: yup.date().max(new Date()).required('Birthdate is required'),
+  birth: yup.date().min(1900).required('Birthdate is required'),
   agree: yup.string().required(),
 });
 
@@ -213,5 +214,9 @@ const productId = ref(props.productInModal.id);
 }
 .open {
   display: block;
+}
+
+.modal{
+  background: #00000087;
 }
 </style>

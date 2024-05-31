@@ -11,6 +11,7 @@ function clear() {
 }
 </script>
 <template>
+  <form @submit.prevent = 'search'>
   <div class="input-group">
     <input
       v-model="searchText"
@@ -21,6 +22,7 @@ function clear() {
     <span @click="search" id="searchButton" class="input-group-text">Поиск</span>
     <span @click="clear" id="searchButton" class="input-group-text">Очистить</span>
   </div>
+</form>
 </template>
 
 <style scoped>

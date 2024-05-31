@@ -24,7 +24,7 @@ onBeforeMount(() => {
 
 function search(text) {
   searchArray.value = products.value.filter(
-    (item) => item.description.includes(text) || item.title.includes(text)
+    (item) => item.description.includes(text) || item.title.includes(text) || String(item.price).includes(text)
   );
   console.log(searchArray.value);
 }
