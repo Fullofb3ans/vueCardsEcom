@@ -6,6 +6,7 @@ import { reactive, ref, onBeforeMount, onMounted } from "vue";
 import Vloader from "./components/Vloader.vue";
 import Vsearch from "./components/Vsearch.vue";
 import Vmodal from "./components/Vmodal.vue";
+import getProducts from "./components/serverFetches";
 
 const products = ref([]);
 const searchArray = ref([]);
@@ -13,14 +14,10 @@ const show = ref(false);
 const idProduct = ref();
 const productInModal = ref("");
 
-onBeforeMount(() => {
-  fetch("https://fakestoreapi.com/products")
-    .then((res) => res.json())
-    .then((dat) => {
-      products.value = dat;
-    });
-  console.log(products);
-});
+onBeforeMount(async ()=>{
+ products.value = await getProducts();
+ console.log(products);
+})
 
 function search(text) {
   searchArray.value = products.value.filter(
@@ -47,11 +44,10 @@ function closeModal() {
   <Vsearch @search="search" />
 
   <main>
-    <body>
-      <div class="preview" style="padding: 2%">
+      <div class="preview">
         <Vloader v-if="products.length == 0" />
 
-        <div v-else class="cards" style="">
+        <div v-else class="cards">
           <Vcard
             v-if="searchArray.length !== 0"
             v-for="product in searchArray"
@@ -74,7 +70,6 @@ function closeModal() {
           @closeModal="closeModal"
         />
       </div>
-    </body>
   </main>
   <Vfooter />
 </div>
@@ -88,5 +83,9 @@ function closeModal() {
   grid-gap: 30px;
   align-content: center;
   justify-content: center;
+}
+
+.preview {
+  padding: 2%;
 }
 </style>
