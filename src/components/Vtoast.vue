@@ -1,12 +1,15 @@
 <script setup>
 import { ref } from "vue";
-
-const props = defineProps(["showToast"]);
-const emits = defineEmits([]);
+const props = defineProps(["showToast", "toastText"]);
+const emits = defineEmits(["closeToast"]);
+function closeToast() {
+  emits("closeToast");
+}
 </script>
 <template>
-  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast-container position-fixed top-0 end-0 p-3">
     <div
+      @click="console.log(props)"
       id="liveToast"
       class="toast"
       :class="{ show: props.showToast }"
@@ -17,16 +20,24 @@ const emits = defineEmits([]);
       <div class="toast-header">
         <strong class="me-auto"></strong>
         <button
-          @click="emits('closeToast')"
+          @click="closeToast"
           type="button"
           class="btn-close"
           data-bs-dismiss="toast"
           aria-label="Close"
         ></button>
       </div>
-      <div class="toast-body">Заказ успешно оформлен</div>
+      <div class="toast-body">{{ props.toastText }}</div>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.show {
+  display: block;
+}
+
+.toast-header {
+  background: #0d6efd;
+}
+</style>

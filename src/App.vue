@@ -1,91 +1,84 @@
-<script setup>
-import Vheader from "./components/Vheader.vue";
-import Vcard from "./components/Vcard.vue";
-import Vfooter from "./components/Vfooter.vue";
-import { reactive, ref, onBeforeMount, onMounted } from "vue";
-import Vloader from "./components/Vloader.vue";
-import Vsearch from "./components/Vsearch.vue";
-import Vmodal from "./components/Vmodal.vue";
-import getProducts from "./components/serverFetches";
-
-const products = ref([]);
-const searchArray = ref([]);
-const show = ref(false);
-const idProduct = ref();
-const productInModal = ref("");
-
-onBeforeMount(async ()=>{
- products.value = await getProducts();
- console.log(products);
-})
-
-function search(text) {
-  searchArray.value = products.value.filter(
-    (item) => item.description.includes(text) || item.title.includes(text) || String(item.price).includes(text)
-  );
-  console.log(searchArray.value);
-}
-
-function callBuyModal(id) {
-  productInModal.value = products.value.find((item) => item.id == id);
-  show.value = true;
-  console.log(show.value);
-}
-
-function closeModal() {
-  show.value = false;
-}
-
-</script>
-
 <template>
-  <div>
-  <Vheader />
-  <Vsearch @search="search" />
-
-  <main>
-      <div class="preview">
-        <Vloader v-if="products.length == 0" />
-
-        <div v-else class="cards">
-          <Vcard
-            v-if="searchArray.length !== 0"
-            v-for="product in searchArray"
-            :product="product"
-            @callBuyModal="callBuyModal"
-            :key="'search' + product.id"
-          />
-
-          <Vcard
-            v-else
-            v-for="product in products"
-            :product="product"
-            @callBuyModal="callBuyModal"
-            :key="product.id"
-          />
-        </div>
-        <Vmodal
-          :show="show"
-          :productInModal="productInModal"
-          @closeModal="closeModal"
-        />
-      </div>
-  </main>
-  <Vfooter />
-</div>
+  <div class="layout">
+    <Vheader @loginChanged="loginChanged" :admin="admin"></Vheader>
+    <div class="content">
+      <RouterView
+        @showToast="showToastf"
+        @closeToast="closeToast"
+        @loginChanged="loginChanged"
+        @addToCartArr="addToCartArr"
+      ></RouterView>
+      <Vtoast @closeToast="closeToast" :showToast="showToast" :toastText="toastText" />
+    </div>
+    <Vfooter />
+  </div>
 </template>
 
-<style scoped>
-.cards {
-  padding: 1%;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 30px;
-  align-content: center;
-  justify-content: center;
+<script setup>
+import Vheader from "./components/layout/Vheader.vue";
+import Vfooter from "./components/layout/Vfooter.vue";
+import Vtoast from "./components/Vtoast.vue";
+import { ref, reactive } from "vue";
+const showToast = ref(false);
+const toastText = ref("");
+
+const admin = ref(localStorage.getItem("admin") == "true" ? true : false);
+console.log(admin.value);
+
+function loginChanged() {
+  admin.value = localStorage.getItem("admin") == "true" ? true : false;
+  console.log("poihali" + admin.value);
 }
 
-.preview {
-  padding: 2%;
+function showToastf(text) {
+  showToast.value = false;
+  setTimeout(() => (showToast.value = true), 150);
+
+  toastText.value = text;
+}
+
+function closeToast() {
+  showToast.value = false;
+  toastText.value = "";
+}
+
+const cartArr = reactive([]);
+
+function addToCartArr(id, title, price) {
+  if (cartArr.length == 0) {
+    cartArr.push({
+      id: id,
+      numberOf: 1,
+      title: title,
+      price: price,
+    });
+  } else if (cartArr.some((item) => item.id == id)) {
+    cartArr.map((item) => {
+      item.id == id ? (item.numberOf += 1) : "";
+    });
+  } else {
+    cartArr.push({
+      id: id,
+      numberOf: 1,
+      title: title,
+      price: price,
+    });
+  }
+  localStorage.setItem("cartArr", JSON.stringify(cartArr));
+  showToastf("Товар добавлен в корзину");
+}
+</script>
+
+<style>
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.content {
+  flex: 1;
+}
+footer {
+  padding: 10px;
 }
 </style>
