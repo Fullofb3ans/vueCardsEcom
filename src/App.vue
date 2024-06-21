@@ -19,6 +19,7 @@ import Vheader from "./components/layout/Vheader.vue";
 import Vfooter from "./components/layout/Vfooter.vue";
 import Vtoast from "./components/Vtoast.vue";
 import { ref, reactive } from "vue";
+import router from "./router";
 const showToast = ref(false);
 const toastText = ref("");
 
@@ -67,6 +68,14 @@ function addToCartArr(id, title, price) {
   localStorage.setItem("cartArr", JSON.stringify(cartArr));
   showToastf("Товар добавлен в корзину");
 }
+
+router.beforeEach(async (to, from) => {
+  const admin = localStorage.getItem("admin");
+  if (admin !== "true" && to.name !== "login" && to.name == "adminPanel") {
+    showToastf("Для добавления товара необходимо авторизоваться");
+    return { name: "login" };
+  }
+});
 </script>
 
 <style>

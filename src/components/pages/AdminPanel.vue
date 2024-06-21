@@ -50,7 +50,7 @@ const admin = ref(localStorage.getItem("admin"));
 
 <template>
   <h4>Добавление товара</h4>
-  <div v-if="admin == 'true'" class="loginForm">
+  <div class="loginForm">
     <Form :validation-schema="simpleSchema" @submit="addNewProduct">
       <div class="input-group mb-3">
         <label for="productTitle" class="form-label">Название:</label>
@@ -121,7 +121,7 @@ const admin = ref(localStorage.getItem("admin"));
       <button class="btn btn-outline-primary">Добавить</button>
     </Form>
   </div>
-  <div v-else><h5>Страница требует авторизации</h5></div>
+  <!-- <div v-else><h5>Страница требует авторизации</h5></div> -->
 </template>
 
 <style scoped>

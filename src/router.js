@@ -4,7 +4,7 @@ import Vsearch from './components/pages/Vsearch.vue';
 import Vhome from './components/pages/Vhome.vue';
 import VcardInner from './components/pages/VcardInner.vue';
 import Vcart from './components/pages/Vcart.vue';
-import Сheckout from './components/pages/СheckOut.vue';
+import Checkout from './components/pages/СheckOut.vue';
 import LoginForm from './components/pages/LoginForm.vue';
 import AdminPanel from './components/pages/AdminPanel.vue';
 
@@ -26,7 +26,7 @@ const router = createRouter({
         }
         ,
         {
-            path: '/checkout', component: Сheckout, name: 'checkout', props: true
+            path: '/checkout', component: Checkout, name: 'checkout', props: true
         }
         ,
         {
@@ -38,4 +38,6 @@ const router = createRouter({
         }
     ]
 });
+
+
 export default router;
