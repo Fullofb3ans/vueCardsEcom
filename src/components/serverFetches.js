@@ -23,3 +23,15 @@ export async function addNewProduct(newTitle, newpPrice, newDescription, newImag
     })
         .then((res) => res.json())
 }
+
+export async function checkout(userInfo) {
+    return await fetch("https://httpbin.org/post", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userInfo),
+    })
+        .then((res) => res.json())
+
+}

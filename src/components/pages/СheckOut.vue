@@ -3,22 +3,20 @@ import { ref } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { configure } from "vee-validate";
+import { useCartStore } from "@/stores/cart";
+import { checkout } from "@/components/serverFetches.js";
 configure({
   validateOnBlur: true,
   validateOnChange: true,
   validateOnInput: true,
 });
 
-const emits = defineEmits(["closeToast"]);
+const emits = defineEmits(["closeToast", "showToast"]);
 
-const cart = ref(localStorage.getItem("cartArr"));
+const cart = useCartStore();
 
 function onInvalidSubmit() {
   console.log("invalid");
-  emits("closeToast");
-}
-
-function closeToast() {
   emits("closeToast");
 }
 
@@ -30,18 +28,11 @@ function submitData() {
     "Номер карты": userCard.value,
     "Дата рождения": userBirth.value,
     Согласие: userAgree.value,
-    Товары: cart.value,
+    Товары: cart.cart,
   };
   console.log(userInfo);
-  fetch("https://httpbin.org/post", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userInfo),
-  }).then((response) => {
-    response.ok ? emits("showToast", "Заказ оформлен") : alert("error");
-  });
+  checkout(userInfo);
+  emits("showToast", "Товар успешно добавлен в каталог");
 }
 
 const simpleSchema = yup.object({
