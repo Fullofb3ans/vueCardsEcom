@@ -1,16 +1,18 @@
 <script setup>
 import { ref, onUpdated } from "vue";
 import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+const user = useUserStore();
 const router = useRouter();
-const props = defineProps(["admin"]);
 const emits = defineEmits([]);
+const admin = user.admin;
+console.log(admin);
 
 function exitFromLk() {
-  localStorage.setItem("admin", "false");
+  user.logOut();
   router.push({
     name: "home",
   });
-  emits("loginChanged");
 }
 </script>
 <template>
@@ -35,17 +37,20 @@ function exitFromLk() {
               <li class="nav-item">
                 <router-link :to="{ name: 'search' }">Поиск</router-link>
               </li>
-              <li class="nav-item" :class="{ none: admin }">
+              <li class="nav-item" :class="{ none: user.admin }">
                 <router-link :to="{ name: 'login' }">Войти</router-link>
               </li>
-              <li class="nav-item" :class="{ none: !admin }">
+              <li class="nav-item" :class="{ none: !user.admin }">
                 <router-link :to="{ name: 'adminPanel' }">Добавить товар</router-link>
               </li>
               <li class="nav-item">
                 <router-link :to="{ name: 'cart' }">Корзина</router-link>
               </li>
-              <li class="nav-item" :class="{ none: !admin }">
+              <li class="nav-item" :class="{ none: !user.admin }">
                 <a @click="exitFromLk">Выйти</a>
+              </li>
+              <li class="username">
+                {{ user.mail }}
               </li>
             </ul>
           </div>
@@ -90,5 +95,9 @@ h1 {
 a:hover {
   color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1)) !important;
   text-decoration: underline !important;
+}
+
+.username {
+  color: blueviolet;
 }
 </style>

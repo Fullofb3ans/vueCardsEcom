@@ -4,15 +4,18 @@ import { useRoute, useRouter } from "vue-router";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { configure } from "vee-validate";
+import { useUserStore } from "@/stores/user";
+
+const user = useUserStore();
+const router = useRouter();
+
 configure({
   validateOnBlur: true,
   validateOnChange: true,
   validateOnInput: true,
 });
-const router = useRouter();
 
-// const toastText = ref("Вы авторизованы, можете добавить товар на страницу");
-const emits = defineEmits(["showToast", "loginChanged"]);
+const emits = defineEmits(["showToast"]);
 
 function autorize() {
   const userInfo = {
@@ -21,12 +24,13 @@ function autorize() {
   };
   console.log(userInfo);
 
-  localStorage.setItem("admin", "true");
+  user.logIn(userEmail.value, userPass.value);
+  // console.log(user);
 
   emits("showToast", "Вы авторизованы, можете добавить товар на страницу");
 
+  console.log(user.admin);
   router.push({ name: "adminPanel" });
-  emits("loginChanged");
 }
 
 const simpleSchema = yup.object({

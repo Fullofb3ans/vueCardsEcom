@@ -3,7 +3,13 @@ import { ref } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { configure } from "vee-validate";
-const emits = defineEmits([]);
+import { useUserStore } from "@/stores/user";
+import { addNewProduct } from "../serverFetches";
+const emits = defineEmits(["showToast", "closeToast", "addToCartArr"]);
+
+const user = useUserStore();
+console.log(user);
+
 configure({
   validateOnBlur: true,
   validateOnChange: true,
@@ -15,21 +21,6 @@ function addOk() {
 }
 function addBad() {
   emits("showToast", "Что-то пошло не так");
-}
-
-function addNewProduct() {
-  fetch("https://fakestoreapi.com/products", {
-    method: "POST",
-    body: JSON.stringify({
-      title: productTitle.value,
-      price: productPrice.value,
-      description: productDescription.value,
-      image: productImg.value,
-      category: productCategory.value,
-    }),
-  })
-    .then((res) => res.json())
-    .then((json) => (json ? addOk() : addBad()));
 }
 
 const simpleSchema = yup.object({
@@ -45,13 +36,22 @@ const productImg = ref();
 const productDescription = ref();
 const productPrice = ref();
 const productCategory = ref();
-const admin = ref(localStorage.getItem("admin"));
+
+function newProduct() {
+  console.log("ыф");
+  addNewProduct(
+    productTitle.value,
+    productPrice.value,
+    productDescription.value,
+    productCategory.value
+  ).then((json) => (json ? addOk() : addBad()));
+}
 </script>
 
 <template>
   <h4>Добавление товара</h4>
   <div class="loginForm">
-    <Form :validation-schema="simpleSchema" @submit="addNewProduct">
+    <Form :validation-schema="simpleSchema">
       <div class="input-group mb-3">
         <label for="productTitle" class="form-label">Название:</label>
         <Field
@@ -118,10 +118,9 @@ const admin = ref(localStorage.getItem("admin"));
           <p>Некорректная категория</p>
         </ErrorMessage>
       </div>
-      <button class="btn btn-outline-primary">Добавить</button>
+      <button @click="newProduct" class="btn btn-outline-primary">Добавить</button>
     </Form>
   </div>
-  <!-- <div v-else><h5>Страница требует авторизации</h5></div> -->
 </template>
 
 <style scoped>

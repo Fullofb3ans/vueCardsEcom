@@ -1,16 +1,14 @@
 <script setup>
 import Vcard from "@/components/layout/Vcard.vue";
-import Vfooter from "@/components/layout/Vfooter.vue";
-import { reactive, ref, onBeforeMount, onMounted } from "vue";
-import Vloader from "@/components/Vloader.vue";
-import { getProducts } from "@/components/serverFetches";
+import Vloader from "../Vloader.vue";
 
-const products = ref([]);
+import { useCatalogStore } from "@/stores/catalog";
+
+const catalog = useCatalogStore();
+
+console.log(catalog.isLoading);
+
 const emits = defineEmits(["showToast", "addToCartArr"]);
-
-onBeforeMount(async () => {
-  products.value = await getProducts();
-});
 
 function addToCartArr(id, title, price) {
   emits("addToCartArr", id, title, price);
@@ -20,10 +18,10 @@ function addToCartArr(id, title, price) {
 <template>
   <main>
     <div class="preview">
-      <Vloader v-if="products.length == 0" />
-      <div class="cards">
+      <Vloader v-if="catalog.isLoading || catalog.isEmpty" />
+      <div v-else class="cards">
         <Vcard
-          v-for="product in products"
+          v-for="product in catalog.catalog"
           :product="product"
           :key="product.id"
           @addToCartArr="addToCartArr"

@@ -1,25 +1,16 @@
 <script setup>
+import { useCartStore } from "@/stores/cart";
 import { ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const emits = defineEmits(["showToast"]);
-
-function clearStore() {
-  localStorage.clear();
-  cart.value = [];
-  summaryPrice.value = 0;
-}
+const cart = useCartStore();
 
 function goToCheckOut() {
-  localStorage.cartArr
+  cart.cart
     ? router.push({ name: "checkout" })
     : emits("showToast", "Добавьте товар в корзину");
 }
-
-const cart = ref(JSON.parse(localStorage.getItem("cartArr")));
-const summaryPrice = ref(
-  cart.value ? cart.value.reduce((accum, item) => accum + item.price, 0) : 0
-);
 </script>
 
 <template>
@@ -34,10 +25,10 @@ const summaryPrice = ref(
           <th scope="col">Цена</th>
         </tr>
       </thead>
-      <slot v-for="item in cart">
+      <slot v-for="(item, index) in cart.cart" :key="index">
         <tbody>
           <tr class="">
-            <th scope="row">{{ cart.indexOf(item) + 1 }}</th>
+            <th scope="row">{{ cart.cart.indexOf(item) + 1 }}</th>
             <td>{{ item.title }}</td>
             <td>{{ item.numberOf }}</td>
             <td>{{ item.price }}$</td>
@@ -47,7 +38,7 @@ const summaryPrice = ref(
       <tfoot>
         <tr>
           <th colspan="4">
-            <p>{{ summaryPrice }}$</p>
+            <p>{{ cart.summaryPrice }}$</p>
           </th>
         </tr>
       </tfoot>
@@ -55,7 +46,7 @@ const summaryPrice = ref(
     <div>
       <button @click="goToCheckOut" class="butButton btn btn-outline-primary">
         Оплатить</button
-      ><button @click="clearStore" class="butButton btn btn-outline-primary">
+      ><button @click="cart.cleanCart" class="butButton btn btn-outline-primary">
         Очистить
       </button>
     </div>

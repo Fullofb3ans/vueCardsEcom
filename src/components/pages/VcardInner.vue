@@ -2,35 +2,15 @@
 import { onMounted, ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getProduct } from "../serverFetches";
+import { useCartStore } from "@/stores/cart";
+const emits = defineEmits(["showToast"]);
 const route = useRoute();
 const product = ref([]);
-const emits = defineEmits([]);
+
+const cart = useCartStore();
 
 function addToCartArr(id, title, price) {
-  const cartArr =
-    JSON.parse(localStorage.getItem("cartArr")) == null
-      ? []
-      : JSON.parse(localStorage.getItem("cartArr"));
-  if (cartArr.length == 0) {
-    cartArr.push({
-      id: id,
-      numberOf: 1,
-      title: title,
-      price: price,
-    });
-  } else if (cartArr.some((item) => item.id == id)) {
-    cartArr.map((item) => {
-      item.id == id ? (item.numberOf += 1) : "";
-    });
-  } else {
-    cartArr.push({
-      id: id,
-      title: title,
-      numberOf: 1,
-      price: price,
-    });
-  }
-  localStorage.setItem("cartArr", JSON.stringify(cartArr));
+  cart.addToCart(id, title, price);
   emits("showToast", "Товар добавлен в корзину");
 }
 

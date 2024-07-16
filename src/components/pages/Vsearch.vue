@@ -44,9 +44,8 @@ async function search() {
     </div>
   </form>
   <div class="preview">
-    <div class="cards">
+    <div class="cards" v-if="searchArray.length !== 0">
       <Vcard
-        v-if="searchArray.length !== 0"
         v-for="product in searchArray"
         :product="product"
         :key="'search' + product.id"

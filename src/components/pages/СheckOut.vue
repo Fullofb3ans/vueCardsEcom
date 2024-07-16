@@ -9,7 +9,7 @@ configure({
   validateOnInput: true,
 });
 
-const emits = defineEmits([]);
+const emits = defineEmits(["closeToast"]);
 
 const cart = ref(localStorage.getItem("cartArr"));
 
