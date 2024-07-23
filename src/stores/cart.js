@@ -12,14 +12,7 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     function addToCart(id, title, price) {
-        if (cart.length == 0) {
-            cart.push({
-                id: id,
-                numberOf: 1,
-                title: title,
-                price: price,
-            });
-        } else if (cart.some((item) => item.id == id)) {
+        if (cart.some((item) => item.id == id)) {
             cart.map((item) => {
                 item.id == id ? (item.numberOf += 1) : "";
             });

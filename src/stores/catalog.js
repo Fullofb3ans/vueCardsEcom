@@ -7,7 +7,7 @@ export const useCatalogStore = defineStore('catalog', () => {
     const isLoading = ref(true);
 
     async function loadCatalog() {
-        // isLoading.value = true;
+        isLoading.value = true;
         return new Promise((resolve, reject) => {
             getProducts()
                 .then(data => {
@@ -17,8 +17,9 @@ export const useCatalogStore = defineStore('catalog', () => {
                 })
                 .catch(err => {
                     reject(err);
-                });
-            isLoading.value = false;
+                })
+                .finally(() => { isLoading.value = false }
+                )
         });
     };
 
