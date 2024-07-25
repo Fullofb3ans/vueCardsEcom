@@ -32,7 +32,7 @@ function submitData() {
   };
   console.log(userInfo);
   checkout(userInfo);
-  emits("showToast", "Товар успешно добавлен в каталог");
+  emits("showToast", "Заказ успешно оформлен");
 }
 
 const simpleSchema = yup.object({
